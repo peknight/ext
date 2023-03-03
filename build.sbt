@@ -18,7 +18,9 @@ lazy val commonSettings = Seq(
 lazy val ext = (project in file("."))
   .aggregate(
     catsExt.jvm,
-    catsExt.js
+    catsExt.js,
+    spireExt.jvm,
+    spireExt.js
   )
   .enablePlugins(JavaAppPackaging)
   .settings(commonSettings)
@@ -35,4 +37,14 @@ lazy val catsExt = (crossProject(JSPlatform, JVMPlatform) in file("cats-ext"))
     )
   )
 
+lazy val spireExt = (crossProject(JSPlatform, JVMPlatform) in file("spire-ext"))
+  .settings(commonSettings)
+  .settings(
+    name := "spire-ext",
+    libraryDependencies ++= Seq(
+      "org.typelevel" %%% "spire" % spireVersion,
+    )
+  )
+
 val catsVersion = "2.9.0"
+val spireVersion = "0.18.0"

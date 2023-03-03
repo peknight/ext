@@ -7,3 +7,7 @@
 提供Scala函数式编程库cats的扩展
 
 * `WriterIdT`: `Writer`的Monad Transformer
+
+## spire-ext
+
+提供spire库的扩展
