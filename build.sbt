@@ -24,7 +24,6 @@ lazy val ext = (project in file("."))
     spireExt.jvm,
     spireExt.js
   )
-  .enablePlugins(JavaAppPackaging)
   .settings(commonSettings)
   .settings(
     name := "ext",
