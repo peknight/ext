@@ -1,6 +1,6 @@
 ThisBuild / version := "0.1.0-SNAPSHOT"
 
-ThisBuild / scalaVersion := "3.2.1"
+ThisBuild / scalaVersion := "3.3.0"
 
 ThisBuild / organization := "com.peknight"
 
@@ -56,6 +56,6 @@ lazy val spireExt = (crossProject(JSPlatform, JVMPlatform) in file("spire-ext"))
     )
   )
 
-val catsVersion = "2.9.0"
-val fs2Version = "3.6.1"
+val catsVersion = "2.10.0"
+val fs2Version = "3.9.1"
 val spireVersion = "0.18.0"
