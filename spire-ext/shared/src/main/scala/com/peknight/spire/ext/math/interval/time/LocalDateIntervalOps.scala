@@ -13,12 +13,12 @@ object LocalDateIntervalOps:
 
   def mapToYear(date: Interval[LocalDate]): Interval[Year] = date match
     case All() => Interval.all[Year]
-    case above@Above(_, _) => Interval.atOrAbove(Year.of(BoundOps.get(above.lowerBound, true).getYear))
-    case below@Below(_, _) => Interval.atOrBelow(Year.of(BoundOps.get(below.upperBound, false).getYear))
+    case above@Above(_, _) => Interval.atOrAbove(Year.of(BoundOps.lower(above.lowerBound).getYear))
+    case below@Below(_, _) => Interval.atOrBelow(Year.of(BoundOps.upper(below.upperBound).getYear))
     case bounded@Bounded(_, _, _) =>
       Interval.closed(
-        Year.of(BoundOps.get(bounded.lowerBound, true).getYear),
-        Year.of(BoundOps.get(bounded.upperBound, false).getYear)
+        Year.of(BoundOps.lower(bounded.lowerBound).getYear),
+        Year.of(BoundOps.upper(bounded.upperBound).getYear)
       )
     case Point(v) => Interval.point(Year.of(v.getYear))
     case Empty() => Interval.empty[Year]
