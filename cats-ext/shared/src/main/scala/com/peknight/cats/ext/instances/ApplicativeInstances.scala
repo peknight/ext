@@ -1,4 +1,4 @@
-package com.peknight.cats.ext.applicative.instances
+package com.peknight.cats.ext.instances
 
 import cats.Applicative
 import cats.syntax.applicative.*
