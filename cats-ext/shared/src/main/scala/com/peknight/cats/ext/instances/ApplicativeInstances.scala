@@ -11,3 +11,4 @@ trait ApplicativeInstances:
       (ff, fa).mapN((ef, ea) => (ef, ea).mapN((f, a) => f(a)))
   end given
 end ApplicativeInstances
+object ApplicativeInstances extends ApplicativeInstances
