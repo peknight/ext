@@ -1,7 +1,6 @@
 package com.peknight.cats.ext.instances
 
 import cats.Monad
-import cats.data.EitherT
 import cats.syntax.applicative.*
 import cats.syntax.either.*
 import cats.syntax.flatMap.*
