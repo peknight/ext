@@ -19,6 +19,8 @@ lazy val ext = (project in file("."))
   .aggregate(
     catsExt.jvm,
     catsExt.js,
+    catsEffectExt.jvm,
+    catsEffectExt.js,
     fs2Ext.jvm,
     fs2Ext.js,
     http4sExt.jvm,
@@ -37,6 +39,15 @@ lazy val catsExt = (crossProject(JSPlatform, JVMPlatform) in file("cats-ext"))
     name := "cats-ext",
     libraryDependencies ++= Seq(
       "org.typelevel" %%% "cats-core" % catsVersion,
+    )
+  )
+
+lazy val catsEffectExt = (crossProject(JSPlatform, JVMPlatform) in file("cats-effect-ext"))
+  .settings(commonSettings)
+  .settings(
+    name := "cats-effect-ext",
+    libraryDependencies ++= Seq(
+      "org.typelevel" %%% "cats-effect" % catsEffectVersion,
     )
   )
 
@@ -68,6 +79,7 @@ lazy val spireExt = (crossProject(JSPlatform, JVMPlatform) in file("spire-ext"))
   )
 
 val catsVersion = "2.10.0"
+val catsEffectVersion = "3.5.1"
 val fs2Version = "3.9.2"
 val http4sVersion = "1.0.0-M34"
 val spireVersion = "0.18.0"
