@@ -21,6 +21,8 @@ lazy val ext = (project in file("."))
     catsExt.js,
     fs2Ext.jvm,
     fs2Ext.js,
+    http4sExt.jvm,
+    http4sExt.js,
     spireExt.jvm,
     spireExt.js
   )
@@ -47,6 +49,15 @@ lazy val fs2Ext = (crossProject(JSPlatform, JVMPlatform) in file("fs2-ext"))
     )
   )
 
+lazy val http4sExt = (crossProject(JSPlatform, JVMPlatform) in file("http4s-ext"))
+  .settings(commonSettings)
+  .settings(
+    name := "http4s-ext",
+    libraryDependencies ++= Seq(
+      "org.http4s" %%% "http4s-core" % http4sVersion,
+    )
+  )
+
 lazy val spireExt = (crossProject(JSPlatform, JVMPlatform) in file("spire-ext"))
   .settings(commonSettings)
   .settings(
@@ -58,4 +69,5 @@ lazy val spireExt = (crossProject(JSPlatform, JVMPlatform) in file("spire-ext"))
 
 val catsVersion = "2.10.0"
 val fs2Version = "3.9.2"
+val http4sVersion = "1.0.0-M34"
 val spireVersion = "0.18.0"
