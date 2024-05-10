@@ -23,10 +23,15 @@ lazy val ext = (project in file("."))
     catsEffectExt.js,
     fs2Ext.jvm,
     fs2Ext.js,
+    circeExt.jvm,
+    circeExt.js,
     http4sExt.jvm,
     http4sExt.js,
+    scalaCheckExt.jvm,
+    scalaCheckExt.js,
     spireExt.jvm,
-    spireExt.js
+    spireExt.js,
+
   )
   .settings(commonSettings)
   .settings(
@@ -60,12 +65,30 @@ lazy val fs2Ext = (crossProject(JSPlatform, JVMPlatform) in file("fs2-ext"))
     )
   )
 
+lazy val circeExt = (crossProject(JSPlatform, JVMPlatform) in file("circe-ext"))
+  .settings(commonSettings)
+  .settings(
+    name := "circe-ext",
+    libraryDependencies ++= Seq(
+      "io.circe" %%% "circe-core" % circeVersion,
+    )
+  )
+
 lazy val http4sExt = (crossProject(JSPlatform, JVMPlatform) in file("http4s-ext"))
   .settings(commonSettings)
   .settings(
     name := "http4s-ext",
     libraryDependencies ++= Seq(
       "org.http4s" %%% "http4s-core" % http4sVersion,
+    )
+  )
+
+lazy val scalaCheckExt = (crossProject(JSPlatform, JVMPlatform) in file("scalacheck-ext"))
+  .settings(commonSettings)
+  .settings(
+    name := "scalacheck-ext",
+    libraryDependencies ++= Seq(
+      "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
     )
   )
 
@@ -81,5 +104,7 @@ lazy val spireExt = (crossProject(JSPlatform, JVMPlatform) in file("spire-ext"))
 val catsVersion = "2.10.0"
 val catsEffectVersion = "3.5.1"
 val fs2Version = "3.9.2"
+val circeVersion = "0.14.6"
 val http4sVersion = "1.0.0-M34"
 val spireVersion = "0.18.0"
+val scalaCheckVersion = "1.17.0"
