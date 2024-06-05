@@ -40,7 +40,7 @@ package object pipe:
     _.pull.scanChunks[Chunk[I], O](Chunk.empty[I])((acc, hd) => (hd, init(acc)))
       .flatMap(acc => Pull.output(last(acc))).stream
 
-  private[this] def evalScanChunksOptPull[F[_], F2[x] >: F[x], I, I2 >: I, O, S](acc: S, s: Stream[F, I])
+  private def evalScanChunksOptPull[F[_], F2[x] >: F[x], I, I2 >: I, O, S](acc: S, s: Stream[F, I])
     (f: S => Option[Chunk[I2] => F2[(S, Chunk[O])]]): Pull[F2, O, S] =
     f(acc) match
       case None => Pull.pure(acc)
