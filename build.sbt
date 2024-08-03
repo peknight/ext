@@ -25,6 +25,8 @@ lazy val ext = (project in file("."))
     fs2Ext.js,
     circeExt.jvm,
     circeExt.js,
+    circeParserExt.jvm,
+    circeParserExt.js,
     http4sExt.jvm,
     http4sExt.js,
     scalaCheckExt.jvm,
@@ -73,6 +75,17 @@ lazy val circeExt = (crossProject(JSPlatform, JVMPlatform) in file("circe-ext"))
       "io.circe" %%% "circe-core" % circeVersion,
     )
   )
+
+lazy val circeParserExt = (crossProject(JSPlatform, JVMPlatform) in file("circe-parser-ext"))
+  .settings(commonSettings)
+  .settings(
+    name := "circe-parser-ext",
+    libraryDependencies ++= Seq(
+      "io.circe" %%% "circe-parser" % circeVersion,
+      "io.circe" %%% "circe-jawn" % circeVersion,
+    )
+  )
+
 
 lazy val http4sExt = (crossProject(JSPlatform, JVMPlatform) in file("http4s-ext"))
   .settings(commonSettings)
