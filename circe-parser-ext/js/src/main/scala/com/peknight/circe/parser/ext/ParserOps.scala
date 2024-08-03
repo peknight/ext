@@ -1,7 +1,8 @@
 package com.peknight.circe.parser.ext
 
-import io.circe.{Decoder, Error}
+import io.circe.{Decoder, Error, Json, ParsingFailure}
 
 object ParserOps:
+  def parse(input: String): Either[ParsingFailure, Json] = io.circe.jawn.parse(input)
   def decode[A: Decoder](input: String): Either[Error, A] = io.circe.jawn.decode[A](input)
 end ParserOps
