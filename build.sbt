@@ -29,13 +29,14 @@ lazy val ext = (project in file("."))
     circeExt.js,
     circeParserExt.jvm,
     circeParserExt.js,
+    scodecBitsExt.jvm,
+    scodecBitsExt.js,
     http4sExt.jvm,
     http4sExt.js,
     scalaCheckExt.jvm,
     scalaCheckExt.js,
     spireExt.jvm,
     spireExt.js,
-
   )
   .settings(commonSettings)
   .settings(
@@ -96,6 +97,14 @@ lazy val circeParserExt = (crossProject(JSPlatform, JVMPlatform) in file("circe-
     )
   )
 
+lazy val scodecBitsExt = (crossProject(JSPlatform, JVMPlatform) in file("scodec-bits-ext"))
+  .settings(commonSettings)
+  .settings(
+    name := "scodec-bits-ext",
+    libraryDependencies ++= Seq(
+      "org.scodec" %%% "scodec-bits" % scodecVersion,
+    )
+  )
 
 lazy val http4sExt = (crossProject(JSPlatform, JVMPlatform) in file("http4s-ext"))
   .settings(commonSettings)
@@ -129,6 +138,7 @@ val catsEffectVersion = "3.5.4"
 val catsParseVersion = "0.3.10"
 val fs2Version = "3.10.2"
 val circeVersion = "0.14.7"
+val scodecVersion = "1.2.0"
 val http4sVersion = "1.0.0-M34"
 val spireVersion = "0.18.0"
 val scalaCheckVersion = "1.18.0"
