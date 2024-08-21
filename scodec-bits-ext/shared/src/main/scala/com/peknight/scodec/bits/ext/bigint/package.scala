@@ -16,4 +16,6 @@ package object bigint:
     val notPadded = toUnsignedBytes(bigInt)
     if notPadded.length >= minLength then notPadded
     else ByteVector.fill(minLength - notPadded.length)(0) ++ notPadded
+
+  def toByteVector(bigInt: BigInt): ByteVector = ByteVector(bigInt.toByteArray)
 end bigint
