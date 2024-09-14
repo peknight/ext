@@ -1,4 +1,4 @@
-package com.peknight.cats.ext.monad.transformer.syntax
+package com.peknight.cats.ext.syntax
 
 import cats.syntax.applicative.*
 import cats.syntax.applicativeError.*
@@ -6,7 +6,7 @@ import cats.syntax.either.*
 import cats.syntax.functor.*
 import cats.syntax.option.*
 import cats.{Applicative, ApplicativeError, Functor}
-import com.peknight.cats.ext.monad.transformer.OptionEitherT
+import com.peknight.cats.ext.data.OptionEitherT
 
 trait OptionEitherTSyntax:
   extension [L, R](either: Either[L, Option[R]])

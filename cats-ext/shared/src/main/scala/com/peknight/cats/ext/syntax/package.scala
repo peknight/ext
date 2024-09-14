@@ -1,4 +1,4 @@
-package com.peknight.cats.ext.monad.transformer
+package com.peknight.cats.ext
 
 package object syntax:
   object eitherT extends EitherTSyntax

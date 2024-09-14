@@ -1,4 +1,4 @@
-package com.peknight.cats.ext.monad.transformer.syntax
+package com.peknight.cats.ext.syntax
 
 import cats.data.EitherT
 import cats.syntax.applicative.*

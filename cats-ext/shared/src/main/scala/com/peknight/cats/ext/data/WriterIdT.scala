@@ -1,4 +1,4 @@
-package com.peknight.cats.ext.monad.transformer.writer
+package com.peknight.cats.ext.data
 
 import cats.data.Writer
 import cats.{FlatMap, Functor, Semigroup}
@@ -17,5 +17,4 @@ case class WriterIdT[F[_], L, A](value: F[Writer[L, A]]):
       val (la, a) = writer.run
       FlatMap[F].map(f(a))(_.mapWritten(lb => Semigroup[L].combine(la, lb)))
     })
-
 end WriterIdT

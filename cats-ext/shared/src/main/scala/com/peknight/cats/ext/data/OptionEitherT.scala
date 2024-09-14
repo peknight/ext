@@ -1,4 +1,4 @@
-package com.peknight.cats.ext.monad.transformer
+package com.peknight.cats.ext.data
 
 import cats.{Functor, Monad}
 import cats.syntax.functor.*
