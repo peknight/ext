@@ -5,7 +5,7 @@ import cats.syntax.applicative.*
 import cats.syntax.applicativeError.*
 import cats.syntax.either.*
 import cats.syntax.functor.*
-import cats.{Applicative, ApplicativeError, Functor}
+import cats.{Applicative, ApplicativeError, Functor, Monad}
 
 trait EitherTSyntax:
   extension [A, B] (either: Either[A, B])
@@ -19,6 +19,12 @@ trait EitherTSyntax:
     def flLiftET[R](using Functor[F]): EitherT[F, A, R] = EitherT(fa.map(_.asLeft[R]))
     def frLiftET[L](using Functor[F]): EitherT[F, L, A] = EitherT(fa.map(_.asRight[L]))
     def feLiftET[E](using ApplicativeError[F, E]): EitherT[F, E, A] = EitherT(fa.attempt)
+  end extension
+  extension [F[_], A] (eitherT: EitherT[F, A, Boolean])
+    def &&(that: => EitherT[F, A, Boolean])(using Monad[F]): EitherT[F, A, Boolean] = eitherT.flatMap {
+      case true => that
+      case false => false.rLiftET[F, A]
+    }
   end extension
 end EitherTSyntax
 object EitherTSyntax extends EitherTSyntax
