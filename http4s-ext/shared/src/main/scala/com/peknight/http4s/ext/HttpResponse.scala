@@ -8,7 +8,7 @@ import org.http4s.{EntityDecoder, Headers, Response}
 
 import java.time.Instant
 
-case class HttpResponse[A](header: Headers, body: A, expiration: Option[Instant])
+case class HttpResponse[A](headers: Headers, body: A, expiration: Option[Instant])
 object HttpResponse:
   def fromResponse[F[_], A](response: Response[F])(using Sync[F], EntityDecoder[F, A]): F[HttpResponse[A]] =
     for
