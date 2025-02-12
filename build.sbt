@@ -107,6 +107,7 @@ lazy val scodecBitsExt = (crossProject(JSPlatform, JVMPlatform) in file("scodec-
   )
 
 lazy val http4sExt = (crossProject(JSPlatform, JVMPlatform) in file("http4s-ext"))
+  .dependsOn(catsEffectExt)
   .settings(commonSettings)
   .settings(
     name := "http4s-ext",
