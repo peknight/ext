@@ -1,10 +1,11 @@
 package com.peknight.http4s.ext.syntax
 
 import cats.effect.Sync
-import com.peknight.cats.effect.ext.Clock
 import cats.syntax.eq.*
 import cats.syntax.functor.*
 import cats.syntax.traverse.*
+import com.comcast.ip4s.IpAddress
+import com.peknight.cats.effect.ext.Clock
 import org.http4s.CacheDirective.`max-age`
 import org.http4s.headers.*
 import org.http4s.{Headers, Uri}
@@ -31,6 +32,12 @@ trait HeadersSyntax:
           case Left(date) => Some(date.toInstant)
           case Right(seconds) => headers.get[Date].map(_.date.toInstant.plusSeconds(seconds))
       }
+    def getXForwardedFor: List[IpAddress] =
+      headers.get[`X-Forwarded-For`]
+        .map(_.values.collect {
+          case Some(ipAddress) => ipAddress
+        })
+        .getOrElse(Nil)
   end extension
 end HeadersSyntax
 object HeadersSyntax extends HeadersSyntax
