@@ -33,6 +33,8 @@ lazy val ext = (project in file("."))
     scodecBitsExt.js,
     http4sExt.jvm,
     http4sExt.js,
+    log4CatsExt.jvm,
+    log4CatsExt.js,
     scalaCheckExt.jvm,
     scalaCheckExt.js,
     spireExt.jvm,
@@ -116,6 +118,19 @@ lazy val http4sExt = (crossProject(JSPlatform, JVMPlatform) in file("http4s-ext"
     )
   )
 
+lazy val log4CatsExt = (crossProject(JSPlatform, JVMPlatform) in file("log4cats-ext"))
+  .settings(commonSettings)
+  .settings(
+    name := "log4cats-ext",
+    libraryDependencies ++= Seq(
+    )
+  )
+  .jvmSettings(
+    libraryDependencies ++= Seq(
+      log4CatsCore,
+    )
+  )
+
 lazy val scalaCheckExt = (crossProject(JSPlatform, JVMPlatform) in file("scalacheck-ext"))
   .settings(commonSettings)
   .settings(
@@ -141,5 +156,8 @@ val fs2Version = "3.11.0"
 val circeVersion = "0.14.10"
 val scodecVersion = "1.2.1"
 val http4sVersion = "1.0.0-M34"
+val log4CatsVersion = "2.7.0"
 val spireVersion = "0.18.0"
 val scalaCheckVersion = "1.18.1"
+
+val log4CatsCore = "org.typelevel" %% "log4cats-core" % log4CatsVersion
