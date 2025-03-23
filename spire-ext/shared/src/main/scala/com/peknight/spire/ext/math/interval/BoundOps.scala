@@ -3,6 +3,7 @@ package com.peknight.spire.ext.math.interval
 import spire.math.interval.{Closed, Open, ValueBound}
 
 import java.time.LocalDate
+import scala.concurrent.duration.*
 
 object BoundOps:
 
@@ -39,6 +40,24 @@ object BoundOps:
   def upper(bound: ValueBound[LocalDate]): LocalDate =
     bound match
       case Open(a) => a.minusDays(1)
+      case Closed(a) => a
+  end upper
+
+  def get(bound: ValueBound[FiniteDuration], lower: Boolean): FiniteDuration =
+    bound match
+      case Open(a) => if lower then a + 1.nano else a - 1.nano
+      case Closed(a) => a
+  end get
+
+  def lower(bound: ValueBound[FiniteDuration]): FiniteDuration =
+    bound match
+      case Open(a) => a + 1.nano
+      case Closed(a) => a
+  end lower
+
+  def upper(bound: ValueBound[FiniteDuration]): FiniteDuration =
+    bound match
+      case Open(a) => a - 1.nano
       case Closed(a) => a
   end upper
 end BoundOps
