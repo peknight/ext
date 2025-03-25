@@ -22,26 +22,35 @@ package object pipe:
         (sfx, acc ++ pfx)
     }
   end chunkTimesN
-  
-  def scanS[F[_], I, I2 >: I, O, S](init: S)(f: (S, I2) => (S, O)): Pipe[F, I, O] =
-    scanOpt[F, I, I2, O, S](init)(s => Some(i => f(s, i)))
 
-  def scanOpt[F[_], I, I2 >: I, O, S](init: S)(f: S => Option[I2 => (S, O)]): Pipe[F, I, O] = {
+  def scanS[F[_], I, I2 >: I, O, S](init: S)(f: (S, I2) => (S, O)): Pipe[F, I, O] =
+    scanOpt2[F, I, I2, O, S](init)(s => Some { i =>
+      val (s2, o) = f(s, i)
+      (s2, Some(o))
+    })
+
+  def scanOpt[F[_], I, I2 >: I, O, S](init: S)(f: S => Option[I2 => (S, O)]): Pipe[F, I, O] =
+    scanOpt2[F, I, I2, O, S](init)(s => f(s).map { g => i =>
+      val (s2, o) = g(i)
+      (s2, Some(o))
+    })
+
+  def scanSOpt[F[_], I, I2 >: I, O, S](init: S)(f: (S, I2) => (S, Option[O])): Pipe[F, I, O] =
+    scanOpt2[F, I, I2, O, S](init)(s => Some { i => 
+      f(s, i)
+    })
+
+  def scanOpt2[F[_], I, I2 >: I, O, S](init: S)(f: S => Option[I2 => (S, Option[O])]): Pipe[F, I, O] =
     def go(acc: S, s: Stream[F, I]): Pull[F, O, Unit] =
-      f(acc) match {
+      f(acc) match
         case None => Pull.pure(())
-        case Some(g) =>
-          s.pull.uncons1
-            .flatMap {
-              case Some((hd, tl)) =>
-                val (s2, o) = g(hd)
-                Pull.output1(o) >> go(s2, tl)
-              case None =>
-                Pull.pure(())
-            }
-      }
+        case Some(g) => s.pull.uncons1.flatMap {
+          case Some((hd, tl)) => g(hd) match
+            case (s2, Some(o)) => Pull.output1(o) >> go(s2, tl)
+            case (s2, None) => go(s2, tl)
+          case None => Pull.pure(())
+        }
     in => go(init, in).stream
-  }
 
   def scanChunksInitLast[F[_], I, I2 >: I, O, S](initS: => S)(init: (S, Chunk[I2]) => (S, Chunk[O]))
                                                 (last: (S, Chunk[I2]) => Chunk[O]): Pipe[F, I, O] =
