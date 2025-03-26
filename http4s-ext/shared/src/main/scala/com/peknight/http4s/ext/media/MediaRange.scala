@@ -1,4 +1,4 @@
-package com.peknight.http4s.ext
+package com.peknight.http4s.ext.media
 
 import org.http4s.MediaType
 
