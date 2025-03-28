@@ -25,7 +25,9 @@ trait HeadersSyntax:
         }}
         .sequence
         .map(_.orElse(headers.get[Expires].map(_.expirationDate.toInstant)))
-    def getLinks: Option[List[String]] = headers.get[Link].map { _.values.map(_.rel).collect { case Some(rel) => rel } }
+    def getLinks(relation: String): Option[List[Uri]] = headers.get[Link].map(_.values.collect {
+      case link: LinkValue if link.rel.contains(relation) => link.uri
+    })
     def getRetryAfter: Option[Instant] =
       headers.get[`Retry-After`].flatMap { date =>
         date.retry match
