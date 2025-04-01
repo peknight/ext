@@ -25,6 +25,8 @@ lazy val ext = (project in file("."))
     catsParseExt.js,
     fs2Ext.jvm,
     fs2Ext.js,
+    fs2IOExt.jvm,
+    fs2IOExt.js,
     circeExt.jvm,
     circeExt.js,
     circeParserExt.jvm,
@@ -77,6 +79,15 @@ lazy val fs2Ext = (crossProject(JSPlatform, JVMPlatform) in file("fs2-ext"))
     name := "fs2-ext",
     libraryDependencies ++= Seq(
       "co.fs2" %%% "fs2-core" % fs2Version,
+    )
+  )
+
+lazy val fs2IOExt = (crossProject(JSPlatform, JVMPlatform) in file("fs2-io-ext"))
+  .settings(commonSettings)
+  .settings(
+    name := "fs2-io-ext",
+    libraryDependencies ++= Seq(
+      "co.fs2" %%% "fs2-io" % fs2Version,
     )
   )
 
