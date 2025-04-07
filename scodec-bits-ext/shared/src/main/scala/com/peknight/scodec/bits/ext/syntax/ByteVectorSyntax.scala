@@ -4,7 +4,7 @@ import com.peknight.scodec.bits.ext.bigint.fromUnsignedBytes
 import com.peknight.scodec.bits.ext
 import scodec.bits.ByteVector
 
-trait ByteVectorSyntax:
+trait ByteVectorSyntax extends ByteVectorSyntaxPlatform:
   extension (bytes: ByteVector)
     def adjustLength(length: Int): ByteVector = ext.adjustLength(bytes, length)
     def toUnsignedBigInt: BigInt = fromUnsignedBytes(bytes)
