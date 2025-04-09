@@ -12,7 +12,7 @@ object IntervalOps:
     def compare(x: LocalDate, y: LocalDate): Int = x.compareTo(y)
   end given
 
-  def close[N: Integral: Order](interval: Interval[N]): Interval[N] =
+  def close[N: {Integral, Order}](interval: Interval[N]): Interval[N] =
     val lowerBound = interval.lowerBound match
       case Open(lower) => Closed(Integral[N].plus(lower, Integral[N].one))
       case lower => lower
