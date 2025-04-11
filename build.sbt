@@ -35,8 +35,6 @@ lazy val ext = (project in file("."))
     scodecBitsExt.js,
     http4sExt.jvm,
     http4sExt.js,
-    http4sServerExt.jvm,
-    http4sServerExt.js,
     log4CatsExt.jvm,
     log4CatsExt.js,
     scalaCheckExt.jvm,
@@ -128,15 +126,6 @@ lazy val http4sExt = (crossProject(JSPlatform, JVMPlatform) in file("http4s-ext"
     name := "http4s-ext",
     libraryDependencies ++= Seq(
       "org.http4s" %%% "http4s-core" % http4sVersion,
-    )
-  )
-
-lazy val http4sServerExt = (crossProject(JSPlatform, JVMPlatform) in file("http4s-server-ext"))
-  .settings(commonSettings)
-  .settings(
-    name := "http4s-server-ext",
-    libraryDependencies ++= Seq(
-      "org.http4s" %%% "http4s-server" % http4sVersion,
     )
   )
 
