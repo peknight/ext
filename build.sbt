@@ -1,6 +1,6 @@
 ThisBuild / version := "0.1.0-SNAPSHOT"
 
-ThisBuild / scalaVersion := "3.6.2"
+ThisBuild / scalaVersion := "3.7.0"
 
 ThisBuild / organization := "com.peknight"
 
@@ -160,11 +160,11 @@ lazy val spireExt = (crossProject(JSPlatform, JVMPlatform) in file("spire-ext"))
     )
   )
 
-val catsVersion = "2.12.0"
-val catsEffectVersion = "3.5.7"
+val catsVersion = "2.13.0"
+val catsEffectVersion = "3.6.1"
 val catsParseVersion = "0.3.10"
-val fs2Version = "3.11.0"
-val circeVersion = "0.14.10"
+val fs2Version = "3.12.0"
+val circeVersion = "0.14.13"
 val scodecVersion = "1.2.1"
 val http4sVersion = "1.0.0-M34"
 val log4CatsVersion = "2.7.0"
