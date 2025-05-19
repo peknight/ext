@@ -22,6 +22,11 @@ trait ReverseProxy:
           .putHeaders(req.headers.get[Referer].map { referrer =>
             if f.isDefinedAt(referrer.uri) then referrer.copy(uri = f(referrer.uri)) else referrer
           })
+          .putHeaders(req.headers.get[`X-Forwarded-For`]
+            .map(xForwardedFor => xForwardedFor.copy(values = xForwardedFor.values.append(req.remoteAddr)))
+            .getOrElse(`X-Forwarded-For`(req.remoteAddr))
+          )
+          .putHeaders(originUri.scheme.map(`X-Forwarded-Proto`.apply).orElse(req.headers.get[`X-Forwarded-Proto`]))
           .removeHeader[Connection]
           .removeHeader[`Keep-Alive`]
           .removeHeader[`Proxy-Authenticate`]
