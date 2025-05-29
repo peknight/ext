@@ -76,6 +76,7 @@ lazy val catsParseExt = (crossProject(JSPlatform, JVMPlatform) in file("cats-par
     )
   )
 lazy val fs2Ext = (crossProject(JSPlatform, JVMPlatform) in file("fs2-ext"))
+  .dependsOn(catsExt)
   .settings(commonSettings)
   .settings(
     name := "fs2-ext",
