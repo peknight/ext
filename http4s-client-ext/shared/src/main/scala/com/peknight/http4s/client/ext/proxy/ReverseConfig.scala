@@ -9,7 +9,7 @@ trait ReverseConfig:
   def port: Option[Port]
   def subdomain: String
 
-  def reverseUriMapper: PartialFunction[Uri, Uri] =
+  def uriMapper: PartialFunction[Uri, Uri] =
     case uri if uri.host.exists(_.value.contains(subdomain)) =>
       uri.withAuthority(org.http4s.Uri.Host.fromIp4sHost(host), port)
 end ReverseConfig
