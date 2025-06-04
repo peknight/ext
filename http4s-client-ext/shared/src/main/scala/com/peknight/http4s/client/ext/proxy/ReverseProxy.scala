@@ -18,10 +18,8 @@ trait ReverseProxy:
         val originUri = getOriginUri[F](req)
         val targetUri = f(originUri)
         val request = req.withUri(targetUri)
-          .putHeaders(targetUri.host.map(host => Host(host.value)))
-          .putHeaders(req.headers.get[Referer].map { referrer =>
-            if f.isDefinedAt(referrer.uri) then referrer.copy(uri = f(referrer.uri)) else referrer
-          })
+          .putHeaders(targetUri.host.map(host => Host(host.value, targetUri.authority.flatMap(_.port))))
+          .putHeaders(req.headers.get[Referer].mapUri(f)(_.uri)((referrer, uri) => referrer.copy(uri = uri)))
           .putHeaders(req.headers.get[`X-Forwarded-For`]
             .map(xForwardedFor => xForwardedFor.copy(values = xForwardedFor.values.append(req.remoteAddr)))
             .getOrElse(`X-Forwarded-For`(req.remoteAddr))
@@ -32,7 +30,11 @@ trait ReverseProxy:
           .removeHeader[`Proxy-Authenticate`]
           .removeHeader[`Proxy-Authorization`]
           .removeHeader[Upgrade]
-        client.run(request).allocated.map((resp, release) => resp.withEntity(resp.body.onFinalize(release)))
+        client.run(request).allocated.map((resp, release) => resp
+          .putHeaders(resp.headers.get[`Content-Location`].mapUri(f)(_.uri)((location, uri) => location.copy(uri = uri)))
+          .putHeaders(resp.headers.get[Location].mapUri(f)(_.uri)((location, uri) => location.copy(uri = uri)))
+          .withEntity(resp.body.onFinalize(release))
+        )
     }
 
   private def getOriginUri[F[_]](req: Request[F]): Uri =
@@ -40,5 +42,12 @@ trait ReverseProxy:
       .flatMap(host => fromString(host.host)
         .map(uriHost => req.uri.withAuthority(uriHost, host.port.flatMap(Port.fromInt), replacePort = true)))
       .getOrElse(req.uri)
+
+  extension [A] (option: Option[A])
+    def mapUri(f: PartialFunction[Uri, Uri])(get: A => Uri)(update: (A, Uri) => A): Option[A] = option.map { a =>
+      val origin = get(a)
+      if f.isDefinedAt(origin) then update(a, f(origin)) else a
+    }
+  end extension
 end ReverseProxy
 object ReverseProxy extends ReverseProxy
