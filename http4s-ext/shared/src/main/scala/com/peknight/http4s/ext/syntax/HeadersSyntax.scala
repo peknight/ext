@@ -40,6 +40,7 @@ trait HeadersSyntax:
           case Some(ipAddress) => ipAddress
         })
         .getOrElse(Nil)
+    def getXRealIP: Option[IpAddress] = headers.get[`X-Real-IP`].map(_.ipAddress)
   end extension
 end HeadersSyntax
 object HeadersSyntax extends HeadersSyntax
