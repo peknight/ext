@@ -12,7 +12,13 @@ ThisBuild / publishTo := {
     Some("releases" at s"$nexus/maven-releases/")
 }
 
-ThisBuild / credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
+ThisBuild / credentials ++= Seq(
+  Credentials(Path.userHome / ".sbt" / ".credentials")
+)
+
+ThisBuild / resolvers ++= Seq(
+  "Pek Nexus" at "https://nexus.peknight.com/repository/maven-public/",
+)
 
 lazy val commonSettings = Seq(
   scalacOptions ++= Seq(
