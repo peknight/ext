@@ -1,8 +1,18 @@
 ThisBuild / version := "0.1.0-SNAPSHOT"
 
-ThisBuild / scalaVersion := "3.7.0"
+ThisBuild / scalaVersion := "3.7.1"
 
 ThisBuild / organization := "com.peknight"
+
+ThisBuild / publishTo := {
+  val nexus = "https://nexus.peknight.com/repository"
+  if (isSnapshot.value)
+    Some("snapshot" at s"$nexus/maven-snapshots/")
+  else
+    Some("releases" at s"$nexus/maven-releases/")
+}
+
+ThisBuild / credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
 
 lazy val commonSettings = Seq(
   scalacOptions ++= Seq(
@@ -168,7 +178,7 @@ val fs2Version = "3.12.0"
 val circeVersion = "0.14.13"
 val scodecVersion = "1.2.1"
 val http4sVersion = "1.0.0-M34"
-val log4CatsVersion = "2.7.0"
+val log4CatsVersion = "2.7.1"
 val spireVersion = "0.18.0"
 val scalaCheckVersion = "1.18.1"
 
