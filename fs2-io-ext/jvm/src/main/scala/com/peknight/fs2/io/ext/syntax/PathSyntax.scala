@@ -1,8 +1,9 @@
 package com.peknight.fs2.io.ext.syntax
 
+import cats.Applicative
 import cats.effect.Sync
-import cats.syntax.functor.*
-import fs2.io.file.Path
+import cats.syntax.applicative.*
+import fs2.io.file.{Files, Path}
 
 import java.io.{FileInputStream, FileOutputStream, FileReader, FileWriter}
 import java.nio.file.Paths
@@ -15,6 +16,8 @@ trait PathSyntax:
       Sync[F].blocking(new FileInputStream(path.toNioPath.toFile))
     def toFileOutputStream[F[_]: Sync]: F[FileOutputStream] =
       Sync[F].blocking(new FileOutputStream(path.toNioPath.toFile))
+    def createParentDirectories[F[_]: {Applicative, Files}]: F[Unit] =
+      path.parent.fold(().pure[F])(parent => Files[F].createDirectories(parent))
   end extension
   extension (path: Path.type)
     def fromResource[F[_]: Sync](resourcePath: String): F[Path] =
