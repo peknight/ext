@@ -9,6 +9,9 @@ import cats.syntax.ior.*
 import cats.{Applicative, ApplicativeError, Functor, Monad, Semigroup}
 
 trait IorTSyntax:
+  extension [A, B] (either: Either[A, B])
+    def eLiftIT[F[_]: Applicative]: IorT[F, A, B] = IorT(either.toIor.pure[F])
+  end extension
   extension [A, B] (ior: Ior[A, B])
     def iLiftIT[F[_]: Applicative]: IorT[F, A, B] = IorT(ior.pure[F])
   end extension
