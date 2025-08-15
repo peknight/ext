@@ -1,37 +1,7 @@
-ThisBuild / version := "0.1.0-SNAPSHOT"
+import com.peknight.build.gav.typelevel
+import com.peknight.build.sbt.*
 
-ThisBuild / scalaVersion := "3.7.1"
-
-ThisBuild / organization := "com.peknight"
-
-ThisBuild / versionScheme := Some("early-semver")
-
-ThisBuild / publishTo := {
-  val nexus = "https://nexus.peknight.com/repository"
-  if (isSnapshot.value)
-    Some("snapshot" at s"$nexus/maven-snapshots/")
-  else
-    Some("releases" at s"$nexus/maven-releases/")
-}
-
-ThisBuild / credentials ++= Seq(
-  Credentials(Path.userHome / ".sbt" / ".credentials")
-)
-
-ThisBuild / resolvers ++= Seq(
-  "Pek Nexus" at "https://nexus.peknight.com/repository/maven-public/",
-)
-
-lazy val commonSettings = Seq(
-  scalacOptions ++= Seq(
-    "-feature",
-    "-deprecation",
-    "-unchecked",
-    "-Xfatal-warnings",
-    "-language:strictEquality",
-    "-Xmax-inlines:64"
-  ),
-)
+commonSettings
 
 lazy val ext = (project in file("."))
   .aggregate(
@@ -60,22 +30,17 @@ lazy val ext = (project in file("."))
     spireExt.jvm,
     spireExt.js,
   )
-  .settings(commonSettings)
   .settings(
     name := "ext",
   )
 
 lazy val catsExt = (crossProject(JSPlatform, JVMPlatform) in file("cats-ext"))
-  .settings(commonSettings)
+  .settings(crossDependencies(typelevel.cats))
   .settings(
     name := "cats-ext",
-    libraryDependencies ++= Seq(
-      "org.typelevel" %%% "cats-core" % catsVersion,
-    )
   )
 
 lazy val catsEffectExt = (crossProject(JSPlatform, JVMPlatform) in file("cats-effect-ext"))
-  .settings(commonSettings)
   .settings(
     name := "cats-effect-ext",
     libraryDependencies ++= Seq(
@@ -84,7 +49,6 @@ lazy val catsEffectExt = (crossProject(JSPlatform, JVMPlatform) in file("cats-ef
   )
 
 lazy val catsParseExt = (crossProject(JSPlatform, JVMPlatform) in file("cats-parse-ext"))
-  .settings(commonSettings)
   .settings(
     name := "cats-parse-ext",
     libraryDependencies ++= Seq(
@@ -93,7 +57,6 @@ lazy val catsParseExt = (crossProject(JSPlatform, JVMPlatform) in file("cats-par
   )
 lazy val fs2Ext = (crossProject(JSPlatform, JVMPlatform) in file("fs2-ext"))
   .dependsOn(catsExt)
-  .settings(commonSettings)
   .settings(
     name := "fs2-ext",
     libraryDependencies ++= Seq(
@@ -102,7 +65,6 @@ lazy val fs2Ext = (crossProject(JSPlatform, JVMPlatform) in file("fs2-ext"))
   )
 
 lazy val fs2IOExt = (crossProject(JSPlatform, JVMPlatform) in file("fs2-io-ext"))
-  .settings(commonSettings)
   .settings(
     name := "fs2-io-ext",
     libraryDependencies ++= Seq(
@@ -111,7 +73,6 @@ lazy val fs2IOExt = (crossProject(JSPlatform, JVMPlatform) in file("fs2-io-ext")
   )
 
 lazy val circeExt = (crossProject(JSPlatform, JVMPlatform) in file("circe-ext"))
-  .settings(commonSettings)
   .settings(
     name := "circe-ext",
     libraryDependencies ++= Seq(
@@ -120,7 +81,6 @@ lazy val circeExt = (crossProject(JSPlatform, JVMPlatform) in file("circe-ext"))
   )
 
 lazy val circeParserExt = (crossProject(JSPlatform, JVMPlatform) in file("circe-parser-ext"))
-  .settings(commonSettings)
   .settings(
     name := "circe-parser-ext",
     libraryDependencies ++= Seq(
@@ -130,7 +90,6 @@ lazy val circeParserExt = (crossProject(JSPlatform, JVMPlatform) in file("circe-
   )
 
 lazy val scodecBitsExt = (crossProject(JSPlatform, JVMPlatform) in file("scodec-bits-ext"))
-  .settings(commonSettings)
   .settings(
     name := "scodec-bits-ext",
     libraryDependencies ++= Seq(
@@ -140,7 +99,6 @@ lazy val scodecBitsExt = (crossProject(JSPlatform, JVMPlatform) in file("scodec-
 
 lazy val http4sExt = (crossProject(JSPlatform, JVMPlatform) in file("http4s-ext"))
   .dependsOn(catsEffectExt)
-  .settings(commonSettings)
   .settings(
     name := "http4s-ext",
     libraryDependencies ++= Seq(
@@ -149,7 +107,6 @@ lazy val http4sExt = (crossProject(JSPlatform, JVMPlatform) in file("http4s-ext"
   )
 
 lazy val log4CatsExt = (crossProject(JSPlatform, JVMPlatform) in file("log4cats-ext"))
-  .settings(commonSettings)
   .settings(
     name := "log4cats-ext",
     libraryDependencies ++= Seq(
@@ -162,7 +119,6 @@ lazy val log4CatsExt = (crossProject(JSPlatform, JVMPlatform) in file("log4cats-
   )
 
 lazy val scalaCheckExt = (crossProject(JSPlatform, JVMPlatform) in file("scalacheck-ext"))
-  .settings(commonSettings)
   .settings(
     name := "scalacheck-ext",
     libraryDependencies ++= Seq(
@@ -171,7 +127,6 @@ lazy val scalaCheckExt = (crossProject(JSPlatform, JVMPlatform) in file("scalach
   )
 
 lazy val spireExt = (crossProject(JSPlatform, JVMPlatform) in file("spire-ext"))
-  .settings(commonSettings)
   .settings(
     name := "spire-ext",
     libraryDependencies ++= Seq(
