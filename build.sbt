@@ -1,4 +1,4 @@
-import com.peknight.build.gav.{sbt => _, _}
+import com.peknight.build.gav.*
 import com.peknight.build.sbt.*
 
 commonSettings
