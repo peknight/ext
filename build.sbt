@@ -1,4 +1,4 @@
-import com.peknight.build.gav.typelevel
+import com.peknight.build.gav.{sbt => _, _}
 import com.peknight.build.sbt.*
 
 commonSettings
@@ -34,115 +34,79 @@ lazy val ext = (project in file("."))
     name := "ext",
   )
 
-lazy val catsExt = (crossProject(JSPlatform, JVMPlatform) in file("cats-ext"))
+lazy val catsExt = (crossProject(JVMPlatform, JSPlatform, NativePlatform) in file("cats-ext"))
   .settings(crossDependencies(typelevel.cats))
   .settings(
     name := "cats-ext",
   )
 
-lazy val catsEffectExt = (crossProject(JSPlatform, JVMPlatform) in file("cats-effect-ext"))
+lazy val catsEffectExt = (crossProject(JVMPlatform, JSPlatform) in file("cats-effect-ext"))
+  .settings(crossDependencies(typelevel.catsEffect))
   .settings(
     name := "cats-effect-ext",
-    libraryDependencies ++= Seq(
-      "org.typelevel" %%% "cats-effect" % catsEffectVersion,
-    )
   )
 
-lazy val catsParseExt = (crossProject(JSPlatform, JVMPlatform) in file("cats-parse-ext"))
+lazy val catsParseExt = (crossProject(JVMPlatform, JSPlatform) in file("cats-parse-ext"))
+  .settings(crossDependencies(typelevel.catsParse))
   .settings(
     name := "cats-parse-ext",
-    libraryDependencies ++= Seq(
-      "org.typelevel" %%% "cats-parse" % catsParseVersion,
-    )
   )
-lazy val fs2Ext = (crossProject(JSPlatform, JVMPlatform) in file("fs2-ext"))
+
+lazy val fs2Ext = (crossProject(JVMPlatform, JSPlatform) in file("fs2-ext"))
   .dependsOn(catsExt)
+  .settings(crossDependencies(fs2))
   .settings(
     name := "fs2-ext",
-    libraryDependencies ++= Seq(
-      "co.fs2" %%% "fs2-core" % fs2Version,
-    )
   )
 
-lazy val fs2IOExt = (crossProject(JSPlatform, JVMPlatform) in file("fs2-io-ext"))
+lazy val fs2IOExt = (crossProject(JVMPlatform, JSPlatform) in file("fs2-io-ext"))
+  .settings(crossDependencies(fs2.io))
   .settings(
     name := "fs2-io-ext",
-    libraryDependencies ++= Seq(
-      "co.fs2" %%% "fs2-io" % fs2Version,
-    )
   )
 
-lazy val circeExt = (crossProject(JSPlatform, JVMPlatform) in file("circe-ext"))
+lazy val circeExt = (crossProject(JVMPlatform, JSPlatform, NativePlatform) in file("circe-ext"))
+  .settings(crossDependencies(circe))
   .settings(
     name := "circe-ext",
-    libraryDependencies ++= Seq(
-      "io.circe" %%% "circe-core" % circeVersion,
-    )
   )
 
-lazy val circeParserExt = (crossProject(JSPlatform, JVMPlatform) in file("circe-parser-ext"))
+lazy val circeParserExt = (crossProject(JVMPlatform, JSPlatform, NativePlatform) in file("circe-parser-ext"))
+  .settings(crossDependencies(
+    circe.parser,
+    circe.jawn
+  ))
   .settings(
     name := "circe-parser-ext",
-    libraryDependencies ++= Seq(
-      "io.circe" %%% "circe-parser" % circeVersion,
-      "io.circe" %%% "circe-jawn" % circeVersion,
-    )
   )
 
-lazy val scodecBitsExt = (crossProject(JSPlatform, JVMPlatform) in file("scodec-bits-ext"))
+lazy val scodecBitsExt = (crossProject(JVMPlatform, JSPlatform, NativePlatform) in file("scodec-bits-ext"))
+  .settings(crossDependencies(scodec.bits))
   .settings(
     name := "scodec-bits-ext",
-    libraryDependencies ++= Seq(
-      "org.scodec" %%% "scodec-bits" % scodecVersion,
-    )
   )
 
-lazy val http4sExt = (crossProject(JSPlatform, JVMPlatform) in file("http4s-ext"))
+lazy val http4sExt = (crossProject(JVMPlatform, JSPlatform) in file("http4s-ext"))
   .dependsOn(catsEffectExt)
+  .settings(crossDependencies(http4s))
   .settings(
     name := "http4s-ext",
-    libraryDependencies ++= Seq(
-      "org.http4s" %%% "http4s-core" % http4sVersion,
-    )
   )
 
-lazy val log4CatsExt = (crossProject(JSPlatform, JVMPlatform) in file("log4cats-ext"))
+lazy val log4CatsExt = (crossProject(JVMPlatform, JSPlatform, NativePlatform) in file("log4cats-ext"))
+  .jvmSettings(dependencies(typelevel.log4Cats))
   .settings(
     name := "log4cats-ext",
-    libraryDependencies ++= Seq(
-    )
-  )
-  .jvmSettings(
-    libraryDependencies ++= Seq(
-      log4CatsCore,
-    )
   )
 
-lazy val scalaCheckExt = (crossProject(JSPlatform, JVMPlatform) in file("scalacheck-ext"))
+lazy val scalaCheckExt = (crossProject(JVMPlatform, JSPlatform, NativePlatform) in file("scalacheck-ext"))
+  .settings(crossDependencies(scalaCheck))
   .settings(
     name := "scalacheck-ext",
-    libraryDependencies ++= Seq(
-      "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
-    )
   )
 
-lazy val spireExt = (crossProject(JSPlatform, JVMPlatform) in file("spire-ext"))
+lazy val spireExt = (crossProject(JVMPlatform, JSPlatform) in file("spire-ext"))
+  .settings(crossDependencies(typelevel.spire))
   .settings(
     name := "spire-ext",
-    libraryDependencies ++= Seq(
-      "org.typelevel" %%% "spire" % spireVersion,
-    )
   )
-
-val catsVersion = "2.13.0"
-val catsEffectVersion = "3.6.1"
-val catsParseVersion = "0.3.10"
-val fs2Version = "3.12.0"
-val circeVersion = "0.14.13"
-val scodecVersion = "1.2.1"
-val http4sVersion = "1.0.0-M34"
-val log4CatsVersion = "2.7.1"
-val spireVersion = "0.18.0"
-val scalaCheckVersion = "1.18.1"
-
-val log4CatsCore = "org.typelevel" %% "log4cats-core" % log4CatsVersion
